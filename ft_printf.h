@@ -12,22 +12,22 @@
 #ifndef FT_PRINTF_H
 #define FT_PRINTF_H
 
-#include <stdarg.h>
-#include <stddef.h>
+#include <stdarg.h>  // Pour gérer va_list, va_start, etc.
+#include <stddef.h>  // Pour NULL
 
-// pour gérer les flags ou conversion
+// Structure pour gérer les drapeaux et options des conversions
 typedef struct s_format
 {
-    int left_align;    // '-'
-    int zero_padding;  // '0'
+    int left_align;    // Drapeau '-'
+    int zero_padding;  // Drapeau '0'
     int width;         // Largeur minimale
     int precision;     // Précision '.'
-    int hashtag;       // '#'
-    int plus_sign;     // '+'
-    int space;         // ' '
+    int hashtag;       // Drapeau '#'
+    int plus_sign;     // Drapeau '+'
+    int space;         // Drapeau ' '
 }   t_format;
 
-// les protos
+// Fonctions de gestion des formats et bonus
 int ft_printf(const char *format, ...);
 void flush_buffer(char *buffer, int *index);
 int print_char_buffered(char c, char *buffer, int *index);
@@ -37,6 +37,11 @@ int print_unsigned(unsigned int n, char *buffer, int *index);
 int print_hex(unsigned int n, int uppercase, char *buffer, int *index);
 int print_pointer(void *ptr, char *buffer, int *index);
 int handle_format(char specifier, va_list args, char *buffer, int *index, t_format *fmt);
-void parse_flags(const char **format, t_format *fmt, va_list args); // Fonction pour analyser les drapeaux
+
+// Fonctions pour analyser les drapeaux, largeur et précision
+void parse_individual_flags(const char **format, t_format *fmt);
+void parse_width(const char **format, t_format *fmt);
+void parse_precision(const char **format, t_format *fmt);
+void parse_flags(const char **format, t_format *fmt, va_list args);
 
 #endif
