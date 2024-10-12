@@ -9,10 +9,8 @@
 /*   Updated: 2024/10/12 05:32:26 by moutdili         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
-
-#include <unistd.h>   // Pour write
-#include <stddef.h>   // Pour NULL
 #include "ft_printf.h"
+#include <unistd.h>  // Pour write
 
 #define BUFFER_SIZE 1024
 
@@ -33,7 +31,6 @@ int print_char_buffered(char c, char *buffer, int *index)
 int print_str(char *s, char *buffer, int *index)
 {
     int count = 0;
-
     if (s == NULL)
         s = "(null)";
     while (*s)
@@ -44,7 +41,6 @@ int print_str(char *s, char *buffer, int *index)
 int print_number_base(unsigned long n, int base, char *range, char *buffer, int *index)
 {
     int count = 0;
-
     if (n >= (unsigned long)base)
         count += print_number_base(n / base, base, range, buffer, index);
     count += print_char_buffered(range[n % base], buffer, index);
@@ -70,7 +66,23 @@ int print_pointer(void *ptr, char *buffer, int *index)
     return count;
 }
 
-int handle_format(char specifier, va_list args, char *buffer, int *index)
+// Fonction pour analyser les drapeaux, largeur et précision
+static void parse_flags(const char **format, t_format *fmt)
+{
+    fmt->left_align = 0;
+    fmt->zero_padding = 0;
+    fmt->width = 0;
+    fmt->precision = -1;
+    fmt->hashtag = 0;
+    fmt->plus_sign = 0;
+    fmt->space = 0;
+
+    parse_individual_flags(format, fmt);
+    parse_width(format, fmt);
+    parse_precision(format, fmt);
+}
+
+int handle_format(char specifier, va_list args, char *buffer, int *index, t_format *fmt)
 {
     if (specifier == 'c')
         return print_char_buffered(va_arg(args, int), buffer, index);
@@ -105,6 +117,7 @@ int ft_printf(const char *format, ...)
     int count = 0;
     char buffer[BUFFER_SIZE];
     int index = 0;
+    t_format fmt;  // Structure pour les drapeaux et options
 
     va_start(args, format);
     while (*format)
@@ -112,7 +125,8 @@ int ft_printf(const char *format, ...)
         if (*format == '%')
         {
             format++;
-            count += handle_format(*format, args, buffer, &index);
+            parse_flags(&format, &fmt);  // On analyse les drapeaux et options
+            count += handle_format(*format, args, buffer, &index, &fmt);
         }
         else
             count += print_char_buffered(*format, buffer, &index);
@@ -122,4 +136,3 @@ int ft_printf(const char *format, ...)
     flush_buffer(buffer, &index);
     return count;
 }
-
