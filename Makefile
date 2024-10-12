@@ -1,32 +1,43 @@
 # Nom de la bibliothèque
-NAME = ft_printf.a
+NAME = libftprintf.a
+
+# Compilateur et flags
+CC = gcc
+CFLAGS = -Wall -Wextra -Werror
 
 # Fichiers sources
-SRCS = ft_printf.c print_char.c print_str.c print_hex.c print_digits.c print_pointer.c
+SRCS = ft_printf.c parse_bonus.c
 
 # Fichiers objets
 OBJS = $(SRCS:.c=.o)
 
-# Compilateur et options
-CC = gcc
-CFLAGS = -Wall -Wextra -Werror
+# Commande pour créer la bibliothèque
+AR = ar rcs
 
-# Règles de construction
+# Compilation de la bibliothèque
 all: $(NAME)
 
 $(NAME): $(OBJS)
-	ar rcs $(NAME) $(OBJS)
+	$(AR) $(NAME) $(OBJS)
 
-# Suppression des fichiers objets
+# Supprime les fichiers objets
 clean:
 	rm -f $(OBJS)
 
-# Suppression de la bibliothèque et des fichiers objets
+# Supprime les fichiers objets et la bibliothèque
 fclean: clean
 	rm -f $(NAME)
 
-# Reconstruction de la bibliothèque
+# Recompile tout
 re: fclean all
 
-.PHONY: all clean fclean re
+# Gestion des fichiers bonus
+bonus: $(OBJS)
+	$(AR) $(NAME) $(OBJS)
 
+# Règle pour compiler les .c en .o
+$(OBJS): %.o: %.c
+	$(CC) $(CFLAGS) -c $< -o $@
+
+# Indique que les règles ne sont pas des fichiers
+.PHONY: all clean fclean re bonus
