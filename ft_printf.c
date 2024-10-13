@@ -9,6 +9,7 @@
 /*   Updated: 2024/10/12 05:32:26 by moutdili         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
+
 #include "ft_printf.h"
 #include <unistd.h>  // Pour write
 
@@ -108,7 +109,9 @@ int handle_format(char specifier, va_list args, char *buffer, int *index, t_form
         return print_pointer(va_arg(args, void *), buffer, index);
     else if (specifier == '%')
         return print_char_buffered('%', buffer, index);
-    return 0;
+    
+    // Gestion des spécificateurs non reconnus
+    return 0;  // On peut choisir de ne rien afficher si le spécificateur n'est pas reconnu
 }
 
 int ft_printf(const char *format, ...)
@@ -136,3 +139,4 @@ int ft_printf(const char *format, ...)
     flush_buffer(buffer, &index);
     return count;
 }
+
