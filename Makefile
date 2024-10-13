@@ -6,7 +6,11 @@ CC = gcc
 CFLAGS = -Wall -Wextra -Werror
 
 # Fichiers sources
-SRCS = ft_printf.c parse_bonus.c
+SRCS = ft_printf.c \
+       print_format.c \
+       print_format2.c \
+       handle_format.c \
+       process_char.c
 
 # Fichiers objets
 OBJS = $(SRCS:.c=.o)
@@ -31,13 +35,11 @@ fclean: clean
 # Recompile tout
 re: fclean all
 
-# Gestion des fichiers bonus
-bonus: $(OBJS)
-	$(AR) $(NAME) $(OBJS)
-
 # Règle pour compiler les .c en .o
-$(OBJS): %.o: %.c
+%.o: %.c
 	$(CC) $(CFLAGS) -c $< -o $@
 
-# Indique que les règles ne sont pas des fichiers
-.PHONY: all clean fclean re bonus
+# Indique que les règles ne sont pas des fichiers.
+.PHONY: all clean fclean re
+
+
