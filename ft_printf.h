@@ -9,6 +9,7 @@
 /*   Updated: 2024/10/12 05:30:20 by moutdili         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
+
 #ifndef FT_PRINTF_H
 #define FT_PRINTF_H
 
@@ -42,6 +43,6 @@ int handle_format(char specifier, va_list args, char *buffer, int *index, t_form
 void parse_individual_flags(const char **format, t_format *fmt);
 void parse_width(const char **format, t_format *fmt);
 void parse_precision(const char **format, t_format *fmt);
-void parse_flags(const char **format, t_format *fmt, va_list args);
+void parse_flags(const char **format, t_format *fmt);
 
 #endif
