@@ -21,20 +21,19 @@ int	print_char_buffered(char c, char *buffer, int *index)
 	return (1);
 }
 
-int	print_str(const char *str, char *buffer, int *index)
+int print_str(const char *str, char *buffer, int *index)
 {
-	int	count;
+    int count = 0;
 
-	count = 0;
-	if (str == NULL)
-		str = "(null)";
-	while (*str)
-	{
-		if (print_char_buffered(*str++, buffer, index) < 0)
-			return (-1);
-		count++;
-	}
-	return (count);
+    if (!str)
+        str = "(null)";
+    while (*str)
+    {
+        if (print_char_buffered(*str++, buffer, index) < 0)
+            return (-1);
+        count++;
+    }
+    return count;
 }
 
 int	print_number(long n, char *buffer, int *index)
